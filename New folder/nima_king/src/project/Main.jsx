@@ -2,6 +2,8 @@ import React from "react";
 import List from "./List";
 import Data from "../../../Homework-APS-pre-redux-toolkit/data.json";
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Addalldata } from "../Stors/reducer";
 function Art({ name, onclear }) {
   return (
     <>
@@ -27,7 +29,7 @@ function Art({ name, onclear }) {
           <button
             onClick={() => onclear(n)}
             type="button"
-            className="btn-close w-25 h-75 hover-b hoverpo"
+            className="btn-close w-25  hover-b hoverpo "
             aria-label="Close"
           ></button>
         </article>
@@ -44,7 +46,10 @@ function Art({ name, onclear }) {
 }
 
 export default function Main() {
-  const [item, setitem] = useState(["CSS", "JavaScript", "Frontend"]);
+  const [item, setitem] = useState([]);
+  const dispach = useDispatch();
+  dispach(Addalldata(Data));
+  // console.log(Data);
 
   console.log(item);
   return (
@@ -55,10 +60,10 @@ export default function Main() {
       ></section>
       {item.length != 0 && (
         <section
-          className="ps-4 w-75 shadow-drop d-flex justify-content-start align-items-center "
+          className="ps-4 w-75 shadow-drop d-flex justify-content-start align-items-center flex-wrap "
           style={{
             margin: "-20px",
-            height: "60px",
+            height: "fit-content",
             backgroundColor: "white",
             justifySelf: "center",
           }}
@@ -73,7 +78,14 @@ export default function Main() {
           />
         </section>
       )}
-      <List Data={Data} filter={item} />
+      <List
+        Data={Data}
+        filter={item}
+        Add={(name) => {
+          const bool = item.some((item) => item == name);
+          !bool && setitem((item) => [...item, name]);
+        }}
+      />
     </section>
   );
 }
